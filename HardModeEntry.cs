@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Linq; // idk
 using UnityEngine; // Unity stuff
 using MelonLoader; // Modloader
 using Il2Cpp; // To modify general stuff.
@@ -8,6 +8,7 @@ using Il2CppMonomiPark.SlimeRancher.Script.UI.Pause; // For F10 Debug key.
 using UnityEngine.InputSystem; // For debug input.
 using Il2CppMonomiPark.SlimeRancher.UI;
 using HarmonyLib; // Harmony Patches stuff.
+using Il2CppKinematicCharacterController; // Save bricking
 
 namespace HardMode
 {
@@ -63,21 +64,13 @@ namespace HardMode
             }
             else if (sceneName == "DeathLoadScene") // On death.
             {
-                var text0 = Get<GameObject>("Tip1"); // Gets top text on death screen.
-                text0.GetComponent<TextMeshProUGUI>().m_text = "You died..."; // Sets top text.
+                Get<GameObject>("DeathScreenUI").active = false; // Removes death ui.
 
-
-                var text1 = Get<GameObject>("Tip2"); // Gets top text on death screen.
-                text1.GetComponent<TextMeshProUGUI>().m_text = "ALT + F4 TO EXIT"; // Sets bottom text.
-
-                // Refreshes text
-                text1.active = false;
-                text0.active = false;
-                text1.active = true;
-                text0.active = true;
-
-                var bar = Get<GameObject>("BottomBar"); // Gets the bar at the bottom of the death screen
-                bar.active = false; // Hides the bottom bar.
+                // Save bricker
+                var player = Get<GameObject>("PlayerControllerKCC"); // Gets the player.
+                player.GetComponent<KinematicCharacterMotor>().enabled = false; // Disables player motor.
+                player.transform.position = new Vector3(99999, 1, 99999); // Resets player position.
+                Application.Quit(); // Closes the game.
             }
             else if (sceneName == "zoneFields")
             {
