@@ -368,7 +368,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SaveStuff.cs" />
     <Compile Include="HardModeEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

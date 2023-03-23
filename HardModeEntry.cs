@@ -9,6 +9,8 @@ using UnityEngine.InputSystem; // For debug input.
 using Il2CppMonomiPark.SlimeRancher.UI;
 using HarmonyLib; // Harmony Patches stuff.
 using Il2CppKinematicCharacterController; // Save bricking
+using System; // used for set
+using Il2CppMonomiPark.SlimeRancher.Player.CharacterController;
 
 namespace HardMode
 {
@@ -57,19 +59,20 @@ namespace HardMode
                 Get<EconomyDirector>("SceneContext").dailyShutdownMins = 420; // Sets Market Times.
                 var pdh = Get<PlayerDeathHandler>("PlayerControllerKCC"); // Gets the death stuff.
                 pdh.delayTime = float.MaxValue; // Makes death screen forever.
-                pdh.fadeTime = (float)2.1; // Slows fade time on death.
+                pdh.fadeTime = (float)1.85; // Slows fade time on death.
                 pdh.ranchHouseUIPrefab = null; // Disables death from ending properly.
                 Get<AutoSaveDirector>("GameContext").nextSaveTime = float.MaxValue; ;// Disables normal autosaving.
                 Get<GameSettingsDirector>("GameContext").damageMultiplier.Value = (float)2.5; // 2.5x Damage
+
+                // Speed Setter
+                Get<SRCharacterController>("PlayerControllerKCC").parameters.maxGroundedMoveSpeed = 6;
+                Get<SRCharacterController>("PlayerControllerKCC").parameters.maxAirMoveSpeed = 8;
+
             }
             else if (sceneName == "DeathLoadScene") // On death.
             {
                 Get<GameObject>("DeathScreenUI").active = false; // Removes death ui.
-
-                // Save bricker
-                var player = Get<GameObject>("PlayerControllerKCC"); // Gets the player.
-                player.GetComponent<KinematicCharacterMotor>().enabled = false; // Disables player motor.
-                player.transform.position = new Vector3(99999, 1, 99999); // Resets player position.
+                Get<SRCharacterController>("PlayerControllerKCC").Position = new Vector3(999999, 2, 999999); // Sets player position, bricks save.
                 Application.Quit(); // Closes the game.
             }
             else if (sceneName == "zoneFields")
